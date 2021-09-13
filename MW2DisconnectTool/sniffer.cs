@@ -33,6 +33,7 @@ namespace MW2DisconnectTool
 
             bool adderessFounded = false;
             string adapterIpAddress = string.Empty;
+            LivePacketDevice finded = null;
             foreach (var device in allDevices)
             {
                 foreach (var adress in device.Addresses)
@@ -41,10 +42,12 @@ namespace MW2DisconnectTool
                     if (result.Count != 0)
                     {
                         adapterIpAddress = result[0].ToString();
+                        finded = device;
                         adderessFounded = true;
                         break;
                     }
                 }
+
                 if(adderessFounded)
                 {
                     break;
@@ -60,8 +63,8 @@ namespace MW2DisconnectTool
             {
                 MainForm.LocalIP = adapterIpAddress;
             }
-            
-            PacketDevice selectedDevice = allDevices[0];
+
+            PacketDevice selectedDevice = finded;
 
             using (PacketCommunicator communicator =
                 selectedDevice.Open(65536,                                  // portion of the packet to capture
